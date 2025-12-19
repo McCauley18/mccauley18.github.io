@@ -446,40 +446,40 @@
 
             const projects = [
                 {
-                    id: 1,
-                    title: "Predictive Maintenance System",
-                    description: "Machine Learning model that predicts equipment failures in industrial settings using sensor data, reducing downtime by 30%.",
-                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                    tech: ["Python", "TensorFlow", "Scikit-learn", "Pandas", "Flask"],
-                    demoLink: "#",
-                    codeLink: "#"
+                    id: 1, 
+                    title: "Smart HealthBot AI",
+                    description: "AI chatbot that provides personalized health guidance and support, leveraging natural language understanding and medical knowledge.",
+                    image: "images/healthbo.avif",
+                    tech: ["Python", "TensorFlow", "Scikit-learn", "Pandas", "Flask" , "NLP", "Hugging Face"],
+                    codeLink: "https://github.com/McCauley18/medical-knowledge-retrieval-chatbot.git",
+                    codeAvailable: true
                 },
                 {
                     id: 2,
                     title: "Customer Churn Prediction",
-                    description: "AI solution that identifies customers at risk of leaving with 92% accuracy, enabling targeted retention strategies.",
+                    description: "AI solution that identifies customers at risk of leaving with 85% accuracy, enabling targeted retention strategies.",
                     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w-800&q=80",
-                    tech: ["Python", "XGBoost", "NumPy", "Matplotlib", "FastAPI"],
-                    demoLink: "#",
-                    codeLink: "#"
+                    tech: ["Python", "Autogluon", "Streamlit", "FastAPI", "Pandas", "Scikit-learn"],
+                    codeLink: "https://github.com/McCauley18/ChurnWatch.git",
+                    codeAvailable: true
                 },
                 {
                     id: 3,
-                    title: "Real-time Sentiment Analysis",
-                    description: "NLP model that analyzes social media data in real-time to gauge public sentiment about products and brands.",
+                    title: "Mthatha - Find your school",
+                    description: "End-to-end ML project that collects and analyzes local school data in my town, providing actionable recommendations to parents using unsupervised learning techniques.",
                     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                    tech: ["Python", "PyTorch", "Transformers", "AWS", "Docker"],
-                    demoLink: "#",
-                    codeLink: "#"
+                    tech: ["Python", "BeautifulSoup", "scikit-learn", "Pandas", "Streamlit"],
+                    codeLink: "#",
+                    codeAvailable: false
                 },
                 {
                     id: 4,
-                    title: "Medical Image Diagnosis Assistant",
-                    description: "Deep Learning system that assists radiologists in detecting anomalies in medical images with 96% accuracy.",
-                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                    tech: ["Python", "TensorFlow", "OpenCV", "Keras", "React"],
-                    demoLink: "#",
-                    codeLink: "#"
+                    title: "Deepfake Video Detector",
+                    description: "Deep learning system that analyzes videos to distinguish deepfake content from real footage, helping detect manipulated media with high accuracy.",
+                    image: "https://images.unsplash.com/photo-1581091215361-964a64d0e6b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    tech: ["Python", "TensorFlow", "Keras", "OpenCV", "scikit-learn"],
+                    codeLink: "#",
+                    codeAvailable: false
                 }
             ];
 
@@ -594,11 +594,19 @@
                                                 {project.tech.map((tech, index) => (
                                                     <span key={index} className="tech-tag">{tech}</span>
                                                 ))}
-                                            </div>
-                                            
+                                            </div>  
+                                                
                                             <div className="project-links">
-                                                <a href={project.demoLink} className="btn">Live Demo</a>
-                                                <a href={project.codeLink} className="btn btn-secondary">View Code</a>
+                                                
+                                                {project.codeAvailable ? (
+                                                    <a href={project.codeLink} className="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+                                                    GitHub
+                                                    </a>
+                                                ) : (
+                                                    <button className="btn btn-secondary" disabled>
+                                                    Coming Soon
+                                                    </button>
+                                                )} 
                                             </div>
                                         </div>
                                     </div>
@@ -681,3 +689,5 @@
     </script>
 </body>
 </html>
+
+<!-- <a href={project.demoLink} className="btn">Live Demo</a> FROM LINE 600 -->
