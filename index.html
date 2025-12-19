@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLThinker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2d5bff;
+            --primary-dark: #1e3fb3;
+            --secondary: #00d4aa;
+            --dark: #1a1d28;
+            --dark-light: #2a2f3d;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --font-primary: 'Inter', sans-serif;
+            --font-mono: 'Source Code Pro', monospace;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: var(--secondary);
+            bottom: -10px;
+            left: 0;
+            border-radius: 2px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(45, 91, 255, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(26, 29, 40, 0.95);
+            z-index: 1000;
+            padding: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--gray-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 160px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(45, 91, 255, 0.1) 0%, rgba(0, 212, 170, 0.05) 100%);
+            z-index: -1;
+            clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero-subtitle {
+            color: var(--secondary);
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title span {
+            color: var(--secondary);
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--gray-light);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--gray-light);
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .skill-item {
+            background-color: var(--dark-light);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 500;
+            border-left: 3px solid var(--secondary);
+        }
+
+        /* Projects Section */
+        .projects {
+            background-color: var(--dark-light);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background-color: var(--dark);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-description {
+            color: var(--gray-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-tag {
+            background-color: rgba(45, 91, 255, 0.1);
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-description {
+            font-size: 1.2rem;
+            color: var(--gray-light);
+            margin-bottom: 3rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--dark-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-light);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background-color: var(--dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function Portfolio() {
+            const [menuOpen, setMenuOpen] = useState(false);
+
+            const projects = [
+                {
+                    id: 1,
+                    title: "Predictive Maintenance System",
+                    description: "Machine Learning model that predicts equipment failures in industrial settings using sensor data, reducing downtime by 30%.",
+                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                    tech: ["Python", "TensorFlow", "Scikit-learn", "Pandas", "Flask"],
+                    demoLink: "#",
+                    codeLink: "#"
+                },
+                {
+                    id: 2,
+                    title: "Customer Churn Prediction",
+                    description: "AI solution that identifies customers at risk of leaving with 92% accuracy, enabling targeted retention strategies.",
+                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w-800&q=80",
+                    tech: ["Python", "XGBoost", "NumPy", "Matplotlib", "FastAPI"],
+                    demoLink: "#",
+                    codeLink: "#"
+                },
+                {
+                    id: 3,
+                    title: "Real-time Sentiment Analysis",
+                    description: "NLP model that analyzes social media data in real-time to gauge public sentiment about products and brands.",
+                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                    tech: ["Python", "PyTorch", "Transformers", "AWS", "Docker"],
+                    demoLink: "#",
+                    codeLink: "#"
+                },
+                {
+                    id: 4,
+                    title: "Medical Image Diagnosis Assistant",
+                    description: "Deep Learning system that assists radiologists in detecting anomalies in medical images with 96% accuracy.",
+                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                    tech: ["Python", "TensorFlow", "OpenCV", "Keras", "React"],
+                    demoLink: "#",
+                    codeLink: "#"
+                }
+            ];
+
+            const skills = [
+                "Machine Learning", "Deep Learning", "Python", "TensorFlow", "PyTorch", 
+                "Data Analysis", "Natural Language Processing", "PostGreSQL", 
+                "Statistical Modeling", "Pandas", "Docker", "SQL", "Big Data", "Cloud Computing"
+            ];
+
+            const toggleMenu = () => {
+                setMenuOpen(!menuOpen);
+            };
+
+            return (
+                <div>
+                    {/* Navigation */}
+                    <nav>
+                        <div className="container nav-container">
+                            <a href="#" className="logo">Project<span>Portfolio</span></a>
+                            
+                            <div className="nav-links" style={{display: menuOpen ? 'flex' : 'none'}}>
+                                <a href="#home" className="nav-link" onClick={() => setMenuOpen(false)}>Home</a>
+                                <a href="#about" className="nav-link" onClick={() => setMenuOpen(false)}>About</a>
+                                <a href="#projects" className="nav-link" onClick={() => setMenuOpen(false)}>Projects</a>
+                                <a href="#contact" className="nav-link" onClick={() => setMenuOpen(false)}>Contact</a>
+                            </div>
+                            
+                            <button className="mobile-menu-btn" onClick={toggleMenu}>
+                                <i className={menuOpen ? "fas fa-times" : "fas fa-bars"}></i>
+                            </button>
+                        </div>
+                    </nav>
+
+                    {/* Hero Section */}
+                    <section id="home" className="hero">
+                        <div className="hero-bg"></div>
+                        <div className="container">
+                            <div className="hero-content">
+                                <h2 className="hero-subtitle">Hello, I'm</h2>
+                                <h1 className="hero-title">McCauley Ashu <span>Obenembot</span></h1>
+                                <h5 className="hero-title">AI / Machine Learning Engineer (Entry-Level) </h5>
+                                <p className="hero-description">
+                                    I build intelligent systems that solve complex problems using cutting-edge 
+                                    Machine Learning, Deep Learning, and Data Science techniques. 
+                                    Passionate about transforming data into actionable insights and creating AI solutions with real-world impact.
+                                </p>
+                                <div className="hero-btns">
+                                    <a href="#projects" className="btn">View My Work</a>
+                                    <a href="#contact" className="btn btn-secondary">Get In Touch</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* About Section */}
+                    <section id="about">
+                        <div className="container">
+                            <h2 className="section-title">About Me</h2>
+                            <div className="about-content">
+                                <div>
+                                    <img 
+                                        src="images/portfolio.jpg" 
+                                        alt="Professional Headshot" 
+                                        className="about-img"
+                                    />
+                                </div>
+                                <div className="about-text">
+                                    <h3>Transforming Data into Intelligent Solutions</h3>
+                                    <p>
+                                        I am an early-career AI/ML Engineer with a strong academic foundation in Computer 
+                                        Science and Informatics, specializing in machine learning and data-driven systems. 
+                                        I hold a BSc and BSc (Honors with Distinction) in Computer Science from the University of 
+                                        Johannesburg, with my honours research focused on optimizing Convolutional 
+                                        Neural Networks for brain tumor classification.
+                                    </p>
+                                    <p>
+                                        My experience spans the full ML pipeline through academic and personal projects, 
+                                        including data preprocessing, model development, evaluation, and experimentation in 
+                                        areas such as medical imaging, computer vision, and semantic segmentation for 
+                                        autonomous driving scenarios. I have also worked on a DevSecOps CI/CD pipeline 
+                                        project, covering planning, cloud deployment, operations, and monitoring.
+                                    </p>
+                                    <p>
+                                        I am passionate about applying AI ethically to solve real-world problems, continuously 
+                                        expanding my technical skills, and collaborating in learning-driven environments to 
+                                        deliver meaningful, data-informed solutions.
+                                    </p>
+                                    
+                                    <div className="skills-list">
+                                        {skills.map((skill, index) => (
+                                            <div key={index} className="skill-item">{skill}</div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Projects Section */}
+                    <section id="projects" className="projects">
+                        <div className="container">
+                            <h2 className="section-title">My Projects</h2>
+                            <div className="projects-grid">
+                                {projects.map(project => (
+                                    <div key={project.id} className="project-card">
+                                        <img src={project.image} alt={project.title} className="project-img" />
+                                        <div className="project-content">
+                                            <h3 className="project-title">{project.title}</h3>
+                                            <p className="project-description">{project.description}</p>
+                                            
+                                            <div className="project-tech">
+                                                {project.tech.map((tech, index) => (
+                                                    <span key={index} className="tech-tag">{tech}</span>
+                                                ))}
+                                            </div>
+                                            
+                                            <div className="project-links">
+                                                <a href={project.demoLink} className="btn">Live Demo</a>
+                                                <a href={project.codeLink} className="btn btn-secondary">View Code</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Contact Section */}
+                    <section id="contact">
+                        <div className="container">
+                            <div className="contact-content">
+                                <h2 className="section-title">Get In Touch</h2>
+                                <p className="contact-description">
+                                    I'm currently open to new opportunities and collaborations. 
+                                    Whether you have a project in mind or just want to connect, 
+                                    feel free to reach out!
+                                </p>
+                                <a href="mailto:mccauleyashu18@gmail.com" className="btn">Send Message</a>
+                                
+                                <div className="contact-info">
+                                    <div className="contact-item">
+                                        <div className="contact-icon">
+                                            <i className="fas fa-envelope"></i>
+                                        </div>
+                                        <div>
+                                            <h4>Email</h4>
+                                            <p>mccauleyashu18@gmail.com</p>
+                                        </div>
+                                    </div>
+
+ 
+                                    
+                                    <div className="contact-item">
+                                        <div className="contact-icon">
+                                            <i className="fas fa-phone"></i>
+                                        </div>
+                                        <div>
+                                            <h4>Phone</h4>
+                                            <p>063 329 1781</p>
+                                        </div>
+                                    </div> 
+                                    
+                                    <div className="contact-item">
+                                        <div className="contact-icon">
+                                            <i className="fas fa-map-marker-alt"></i>
+                                        </div>
+                                        <div>
+                                            <h4>Location</h4>
+                                            <p>Eastern Cape, ZA</p>
+                                        </div>
+                                    </div>
+
+
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer>
+                        <div className="container">
+                            <a href="#" className="logo">Project<span>Portfolio</span></a>
+                            <div className="social-links">
+                                <a href="https://github.com/McCauley18" className="social-link"><i className="fab fa-github"></i></a>
+                                <a href="https://www.linkedin.com/in/oben-mccauley-75a9402a1" className="social-link"><i className="fab fa-linkedin-in"></i></a>
+                                
+                                <a href="https://www.kaggle.com/obenmccauley" className="social-link"><i className="fab fa-kaggle"></i></a>
+                            </div>
+                            <p className="copyright">© 2025 McCauley Ashu. All rights reserved.</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<Portfolio />, document.getElementById('root'));
+    </script>
+</body>
+</html>
